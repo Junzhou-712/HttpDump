@@ -2,10 +2,10 @@
 /**** Description: A callback function to analyze data packet****/
 #include <stdio.h>
 #include <time.h>
-#include<sys/types.h>
-#include<netinet/in.h>
-#include<string.h>
-#include<pcap.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <pcap.h>
 
 #include "head.h"
 #include "callback.h"
@@ -74,35 +74,35 @@ void ethernet_callback(u_char *arg, const struct pcap_pkthdr *pkthdr, const u_ch
     }
     if (0x8864 == protocol)
     {
-        print("PPPOE Session");
+        printf("PPPOE Session");
         pppoe_callback(arg, pkthdr, packet);
     }
 	
-	print("----Network Layer----\n");
+	printf("----Network Layer----\n");
 	switch (protocol) {
 		case 0x0800: 
-			print("IPv4 protocol!\n");
+			printf("IPv4 protocol!\n");
 			ip_callback(arg, pkthdr, packet);
 			break;
 		case 0x0806:
-			print("ARP protocol!\n");
+			printf("ARP protocol!\n");
 			arp_callback(arg, pkthdr, packet);
 			break;
 		case 0x8035:
-			print("RARP protocol!\n");
+			printf("RARP protocol!\n");
 			break;
 		case 0x86DD:
-			print("IPv6 protocol!\n");
+			printf("IPv6 protocol!\n");
 			break;
 		case 0x880B:
-			print("PPP protocol!\n");
-			print("There is no function to process PPP packet!!!");
+			printf("PPP protocol!\n");
+			printf("There is no function to process PPP packet!!!");
 			break;
 		default:
-			print("Other Network Layer protocol is used!\n");
+			printf("Other Network Layer protocol is used!\n");
 			break;	
 	}	
-	print("----Done----\n\n\n");
+	printf("----Done----\n\n\n");
 }
 
 //pppoe回调函数
@@ -116,7 +116,7 @@ void pppoe_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *
 }
 
 
-void ip_callback(u_char *arg, const struct,pcap_pkthdr *pkthdr,const u_char *packet) {
+void ip_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *packet) {
 	u_char protocol;
 	struct ip *ipheader;
     //ipheader = packet_addr + frame header
@@ -124,7 +124,7 @@ void ip_callback(u_char *arg, const struct,pcap_pkthdr *pkthdr,const u_char *pac
 
 	printf("Version: %d\n", (ipheader->ip_hlv & 0xf0) >> 4); //取hlv高4位
 	printf("Header Length: %d\n",ipheader->ip_hlv & 0x0f);  //取hlv低4位
-	printf("Type of Service: %x\n",ipheader->ip_tos);
+	printf("Type of Service: %x\n",ipheader->ip_hos);
 	printf("Total Length: %d\n",ntohs(ipheader->ip_len));
 	printf("Indentification: %x\n",ntohs(ipheader->ip_id));
 	printf("Offset: %d\n",ntohs(ipheader->ip_off));
@@ -148,7 +148,7 @@ void ip_callback(u_char *arg, const struct,pcap_pkthdr *pkthdr,const u_char *pac
 		icmp_callback(arg, pkthdr, packet);
     }
     
-	print("----Transport Layer----\n");
+	printf("----Transport Layer----\n");
 	switch (protocol)
 	{
 		case 0x06:
@@ -188,7 +188,7 @@ void tcp_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *pa
 
 //tcp flag标识位
 char *tcp_flag(const u_char tcp_flags) {
-	char flags[100] = "-";
+	static char flags[100] = "-";
 	if ((TCP_CWR & tcp_flags) == TCP_CWR) {
 		strncat(flags, "CWR ", 100);
 	}
@@ -218,7 +218,7 @@ char *tcp_flag(const u_char tcp_flags) {
 
 
 //icmp data analysis
-void icmp_callback(u_char *arg, const struct pkthdr *pkthdr,const u_char *packet) {
+void icmp_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *packet) {
     struct icmp *icmpheader = (struct icmp *)(packet + ETHERNET_HEAD_SIZE + IP_HEAD_SIZE(packet));
     u_char icmp_type = icmpheader->icmp_type;
 
@@ -260,7 +260,7 @@ void arp_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *pa
 	printf("Protocol type: %s\n",(ntohs(arpheader->arp_pro) == 0x0800) ? "IPv4" : "Unknow");
 	printf("Operation: %s\n",(ntohs(arpheader->arp_op) == ARP_REQUEST) ? "ARP_Request" : "ARP_Reply");
 
-	print("Sender MAC:");
+	printf("Sender MAC:");
 	for (int i = 0; i < ETHERNET_ADDR_LEN; ++i) {
 		printf("%02x:",arpheader->arp_shost[i]);
 	}
@@ -284,4 +284,6 @@ void igmp_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *p
     printf("Version: %d\n",(igmpheader->igmp_vtype & 0xf0) >> 4);
     printf("Type: %d\n",igmpheader->igmp_vtype & 0x0f);
     printf("CheckSum: %d\n",ntohs(igmpheader->igmp_sum));
+
+
 }

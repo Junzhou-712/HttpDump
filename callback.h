@@ -1,5 +1,8 @@
 #ifndef CALLBACK_H
 #define CALLBACK_H
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <pcap.h>
 
 char *tcp_flag(const u_char tcp_flags);
 
