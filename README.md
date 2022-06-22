@@ -7,3 +7,21 @@ Based on libpcap and Wireshark we used, we can easily utilize the current pcap l
 * Parse pcap file
 * Select specified network interface to capture the packet
 * Analysis the received packet
+# Example
+* Open without filter conditions
+
+    ```httpdump```
+
+* Open with filter conditions
+
+    ```httpdump src host 192.168.1.177```
+
+    ```//Capture packets from host ip 192.168.1.177```
+
+    ```httpdump dst port 80```
+
+    ```//Capture tcp/udp of which destination port is 80```
+
+    ```httpdump not tcp```
+
+    ```//Do not capture packets of which protocol is tcp```
