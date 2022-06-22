@@ -161,7 +161,7 @@ void ip_callback(u_char *arg, const struct,pcap_pkthdr *pkthdr,const u_char *pac
 			break;
 		case 0x02:
 			printf("IGMP Protocol!\n");
-			printf("There is no function to process IGMP packet");
+			igmp_callback(arg, pkthdr, packet);
 			break;
 		default:
 			printf("Other Transport Layer protocol is used!\n");
@@ -277,4 +277,11 @@ void arp_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *pa
 		printf("%d.",arpheader->arp_dip[i]);
 	}
 	printf("\n\n");
+}
+
+void igmp_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *packet) {
+    struct igmp *igmpheader = (struct igmp *)(packet + ETHERNET_HEAD_SIZE + IP_HEAD_SIZE(packet));
+    printf("Version: %d\n",(igmpheader->igmp_vtype & 0xf0) >> 4);
+    printf("Type: %d\n",igmpheader->igmp_vtype & 0x0f);
+    printf("CheckSum: %d\n",ntohs(igmpheader->igmp_sum));
 }

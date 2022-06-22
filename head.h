@@ -100,4 +100,12 @@ struct pppoe {
     u_short pppoe_s_id;
     u_short pppoe_len;
 }
+
+/* IGMP HEADER*/
+struct igmp {
+    u_char igmp_vtype; //仿照pppoe协议
+    u_char igmp_unused;
+    u_short igmp_sum;
+    u_int igmp_gaddr; //组播地址
+}
 #endif
