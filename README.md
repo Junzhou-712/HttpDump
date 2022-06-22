@@ -3,6 +3,13 @@ This repo is created for   Comp Net & Distrib Sys course work, College of Softwa
 Based on libpcap and Wireshark we used, we can easily utilize the current pcap libaray to implement a brand new command-line toolkit for the simple packet capture.
 # Installation
 * Prerequisite: [libpcap](https://www.tcpdump.org/)
+    ```
+    make all
+
+    make clean
+    ```
+
+    The tool's Makefile config can be customized by your own requests.
 # Feature
 * Parse pcap file
 * Select specified network interface to capture the packet
@@ -28,3 +35,6 @@ Based on libpcap and Wireshark we used, we can easily utilize the current pcap l
 
     //Do not capture packets of which protocol is tcp
     ```
+* Select detected network interface
+    You are expected to select an appropriate network interface to begin
+    ![选择网络接口](./src/screenshot.png)
