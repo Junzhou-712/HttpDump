@@ -11,7 +11,6 @@
 #include "callback.h"
 
 char *tcp_flag(const u_char tcp_flags);
-void pppoe_callback(u_char *arg, const struct pcap_pkthdr *pkthdr, const u_char *packet);
 
 extern char filter_exp[128];
 
@@ -253,8 +252,7 @@ void udp_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *pa
 
 
 //arp广播报文分析
-void arp_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *packet)
-{
+void arp_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *packet) {
 	struct arp *arpheader;
 
 	arpheader = (struct arp *)(packet + ETHERNET_HEAD_SIZE);
