@@ -7,11 +7,11 @@ void ethernet_callback(u_char *arg, const struct pcap_pkthdr *pkthdr, const u_ch
 
 void pppoe_callback(u_char *arg, const struct pcap_pkthdr *pkthdr, const u_char *packet);
 
-void ip_callback(u_char *arg, const struct,pcap_pkthdr *pkthdr,const u_char *packet);
+void ip_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *packet);
 
 void tcp_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *packet);
 
-void icmp_callback(u_char *arg, const struct pkthdr *pkthdr,const u_char *packet);
+void icmp_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *packet);
 
 void udp_callback(u_char *arg, const struct pcap_pkthdr *pkthdr,const u_char *packet);
 

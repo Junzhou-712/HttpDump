@@ -1,19 +1,22 @@
-#include<stdio.h>
-#include<pcap.h>
-#include<sys/types.h>
+#include <stdio.h>
+#include <pcap.h>
+#include <sys/types.h>
+#include <string.h>
 #include "head.h"
+#include "callback.h"
 
 #define MAXBYTES2CAPTURE 2048 
 #define PROMISC 1
 
 /* filter condition */
 char filter_exp[128];
-
+/* device name */
+char * dev;
 
 char* select_dev(int choice, pcap_if_t *interfaces, int bufSize) {
     /* select function */
     /* description: select a network interface to sniff on */
-     char * dev;
+
      pcap_if_t * temp;
 
     if(choice >= 0 && choice <= bufSize) {
@@ -22,7 +25,7 @@ char* select_dev(int choice, pcap_if_t *interfaces, int bufSize) {
             temp = temp->next;
         }
        dev = temp->name;
-       printf("%s is selected.\n",dev);
+       printf("%s is selected\n",dev);
     }
 
     return dev;
@@ -31,11 +34,6 @@ char* select_dev(int choice, pcap_if_t *interfaces, int bufSize) {
 int main(int argc,char *argv[]) {
 
     //read pcap file / capture the network interface
-    if(argc != 1) {
-        
-    } else {
-
-    }
     char error[PCAP_ERRBUF_SIZE];
     pcap_if_t *interfaces,*temp;
     int i=0;
@@ -56,7 +54,8 @@ int main(int argc,char *argv[]) {
     struct pcap_pkthdr hdr;
     struct bpf_program bpf_p;
     char* dev;
-    bpf_u_int32 net, bpf_u_int32 mask;
+    bpf_u_int32 net;
+    bpf_u_int32 mask;
 
     printf("Please type the sequence number you want to sniff on:");
     scanf("%d",&choice);
@@ -88,7 +87,8 @@ int main(int argc,char *argv[]) {
    
     int id = 0;
 
-    /*capture the packet until occure error*/
+    /* capture the packet until occure error */
+    /* variety id notes the num of these packets */
 	pcap_loop(handle, -1, ethernet_callback, (u_char *)&id);
 
 	pcap_close(handle);
