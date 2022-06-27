@@ -13,7 +13,7 @@ char filter_exp[128];
 /* device name */
 char * dev;
 
-char* select_dev(int choice, pcap_if_t *interfaces, int bufSize) {
+void select_dev(int choice, pcap_if_t *interfaces, int bufSize) {
     /* select function */
     /* description: select a network interface to sniff on */
 
@@ -27,8 +27,6 @@ char* select_dev(int choice, pcap_if_t *interfaces, int bufSize) {
        dev = temp->name;
        printf("%s is selected\n",dev);
     }
-
-    return dev;
 }
 
 int main(int argc,char *argv[]) {
@@ -53,15 +51,15 @@ int main(int argc,char *argv[]) {
     pcap_t *handle;
     struct pcap_pkthdr hdr;
     struct bpf_program bpf_p;
-    char* dev;
     bpf_u_int32 net;
     bpf_u_int32 mask;
 
     printf("Please type the sequence number you want to sniff on:");
     scanf("%d",&choice);
-    dev = select_dev(choice,interfaces,i);
+    select_dev(choice,interfaces,i);
 
     handle = pcap_open_live(dev, MAXBYTES2CAPTURE, 1, 1000, error);
+    // handle = pcap_open_live("en0", MAXBYTES2CAPTURE, 1, 1000, error);
 
     if(handle == NULL) {
         printf("Couldn't open device %s: %s\n", dev, error);
